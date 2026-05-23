@@ -1,0 +1,52 @@
+# ═══════════════════════════════════════════════════════════════════
+# vSphere Connection Settings
+# Copy this to terraform.tfvars (NOT committed) and fill in your values
+# ═══════════════════════════════════════════════════════════════════
+
+# vSphere server (vCenter or standalone ESXi)
+vsphere_server = "vcenter.example.com"
+
+# vSphere credentials
+vsphere_user     = "administrator@vsphere.local"
+vsphere_password = "your-password-here"
+
+# Homelab: often you have self-signed certs
+vsphere_allow_unverified_ssl = true
+
+# ═══════════════════════════════════════════════════════════════════
+# Infrastructure Targets
+# These are the names of resources already in your vCenter/ESXi
+# ═══════════════════════════════════════════════════════════════════
+
+# vCenter datacenter name (visible in the vSphere client)
+vsphere_datacenter = "HomeLab"
+
+# Cluster name — or your ESXi host if standalone (e.g. "esxi-01.local")
+vsphere_compute_cluster = "Cluster"
+
+# Datastore where VM disks will live
+vsphere_datastore = "datastore1"
+
+# Network/portgroup the VM connects to
+vsphere_network = "VM Network"
+
+# Template name to clone from (use Packer or manual conversion)
+vm_template_name = "ubuntu-22.04-template"
+
+# ═══════════════════════════════════════════════════════════════════
+# VM Resources
+# ═══════════════════════════════════════════════════════════════════
+
+vm_name      = "lab-vm-01"
+vm_num_cpus  = 2
+vm_memory    = 4096
+vm_disk_size = 40
+
+# ═══════════════════════════════════════════════════════════════════
+# Networking (leave empty for DHCP)
+# ═══════════════════════════════════════════════════════════════════
+
+vm_ipv4_address  = ""
+vm_ipv4_netmask  = 24
+vm_ipv4_gateway  = ""
+vm_dns_servers   = ["8.8.8.8", "8.8.4.4"]

@@ -1,0 +1,13 @@
+# Terraform
+*.tfstate*
+*.tfstate.backup
+.terraform/
+.crash.log
+
+# Sensitive variable files
+*.auto.tfvars
+terraform.tfvars
+
+# IDE
+.vscode/
+.idea/
