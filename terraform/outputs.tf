@@ -11,10 +11,9 @@ output "vm_details" {
 output "terraform_state_summary" {
   description = "Quick info about what Terraform manages"
   value = {
-    target_vsphere = var.vsphere_server
-    datacenter     = var.vsphere_datacenter
-    cluster        = var.vsphere_compute_cluster
-    network        = var.vsphere_network
-    vm_name        = var.vm_name
+    datacenter = var.vsphere_datacenter
+    cluster    = var.vsphere_compute_cluster
+    network    = var.vsphere_network
+    vm_name    = var.vm_name
   }
 }

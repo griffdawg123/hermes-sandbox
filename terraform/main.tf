@@ -3,7 +3,7 @@ terraform {
 
   required_providers {
     vsphere = {
-      source  = "hashicorp/vsphere"
+      source  = "vmware/vsphere"
       version = "~> 2.9"
     }
   }
@@ -66,7 +66,7 @@ module "lab_vm" {
 
   # Resource targeting
   datacenter_id  = data.vsphere_datacenter.dc.id
-  cluster_id     = data.vsphere_compute_cluster.cluster.id
+  resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id   = data.vsphere_datastore.datastore.id
   network_id     = data.vsphere_network.network.id
   template_uuid  = data.vsphere_virtual_machine.template.id
@@ -84,13 +84,4 @@ module "lab_vm" {
   dns_servers  = var.vm_dns_servers
 }
 
-# ── Outputs ─────────────────────────────────────────────────────────
-output "vm_details" {
-  description = "Deployed VM details"
-  value = {
-    name       = module.lab_vm.vm_name
-    ip_address = module.lab_vm.vm_ip
-    uuid       = module.lab_vm.vm_uuid
-    power      = module.lab_vm.vm_power_state
-  }
-}
+

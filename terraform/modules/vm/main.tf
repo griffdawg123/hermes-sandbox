@@ -3,8 +3,8 @@ variable "datacenter_id" {
   type        = string
 }
 
-variable "cluster_id" {
-  description = "vSphere compute cluster ID"
+variable "resource_pool_id" {
+  description = "vSphere resource pool ID (from cluster or standalone host)"
   type        = string
 }
 
@@ -70,12 +70,11 @@ variable "dns_servers" {
 # ── VM Resource ──────────────────────────────────────────────────────
 resource "vsphere_virtual_machine" "this" {
   name             = var.vm_name
-  resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
+  resource_pool_id = var.resource_pool_id
   datastore_id     = var.datastore_id
   num_cpus         = var.num_cpus
   memory           = var.memory
   firmware         = "efi"
-  efi_secure_boot  = true
 
   wait_for_guest_ip_timeout = 5
 
