@@ -37,9 +37,9 @@ variable "vsphere_datacenter" {
 }
 
 variable "vsphere_compute_cluster" {
-  description = "Cluster or standalone ESXi host name"
+  description = "vCenter cluster name. Leave empty (\"\") for standalone ESXi."
   type        = string
-  default     = "Cluster"
+  default     = ""
 }
 
 variable "vsphere_datastore" {

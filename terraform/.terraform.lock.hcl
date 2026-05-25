@@ -2,8 +2,7 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/hashicorp/vsphere" {
-  version     = "2.12.0"
-  constraints = "~> 2.9"
+  version = "2.12.0"
   hashes = [
     "h1:iZUn6EuzVhYaNvWKBfCAlaFleSKWVCSj/pLnr/ACwM4=",
     "zh:02eee1071636834570106f70df904807e4d5cff2cf378c9e1dcfbebbeef4411b",

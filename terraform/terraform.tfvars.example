@@ -22,7 +22,7 @@ vsphere_allow_unverified_ssl = true
 vsphere_datacenter = "HomeLab"
 
 # Cluster name — or your ESXi host if standalone (e.g. "esxi-01.local")
-vsphere_compute_cluster = "Cluster"
+vsphere_compute_cluster              = ""
 
 # Datastore where VM disks will live
 vsphere_datastore = "datastore1"
