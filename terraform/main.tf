@@ -19,7 +19,7 @@ terraform {
 #   TF_VAR_vsphere_server      = "vcenter.example.com"
 #   TF_VAR_vsphere_user        = "administrator@vsphere.local"
 #   TF_VAR_vsphere_password    = "your-password"
-# OR via variables.tfvars (not committed):
+# OR via terraform.tfvars.local (not committed):
 #   vsphere_server     = "..."
 #   vsphere_user       = "..."
 #   vsphere_password   = "..."
@@ -33,16 +33,33 @@ provider "vsphere" {
 }
 
 # ── Data Sources (lookup existing infrastructure objects) ────────────
-# These find your real vCenter resources by name so Terraform knows
+# These find your real vCenter/ESXi resources by name so Terraform knows
 # where to deploy.
 
 data "vsphere_datacenter" "dc" {
   name = var.vsphere_datacenter
 }
 
+# ── Standalone ESXi vs vCenter Cluster ───────────────────────────────
+# For standalone ESXi (no vCenter), we use the host's default resource pool.
+# For vCenter with a cluster, we use the cluster's resource pool.
+# Set vsphere_compute_cluster to "" when using standalone ESXi.
+
+data "vsphere_host" "standalone" {
+  count         = var.vsphere_compute_cluster == "" ? 1 : 0
+  name          = var.vsphere_server
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
 data "vsphere_compute_cluster" "cluster" {
+  count         = var.vsphere_compute_cluster != "" ? 1 : 0
   name          = var.vsphere_compute_cluster
   datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+# Resolve the resource pool depending on standalone vs cluster mode
+locals {
+  resource_pool_id = var.vsphere_compute_cluster == "" ? data.vsphere_host.standalone[0].resource_pool_id : data.vsphere_compute_cluster.cluster[0].resource_pool_id
 }
 
 data "vsphere_datastore" "datastore" {
@@ -66,7 +83,7 @@ module "lab_vm" {
 
   # Resource targeting
   datacenter_id  = data.vsphere_datacenter.dc.id
-  resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
+  resource_pool_id = local.resource_pool_id
   datastore_id   = data.vsphere_datastore.datastore.id
   network_id     = data.vsphere_network.network.id
   template_uuid  = data.vsphere_virtual_machine.template.id
@@ -83,5 +100,4 @@ module "lab_vm" {
   ipv4_gateway = var.vm_ipv4_gateway
   dns_servers  = var.vm_dns_servers
 }
-
 
