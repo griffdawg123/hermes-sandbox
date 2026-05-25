@@ -71,6 +71,32 @@ module "web_server" {
 }
 ```
 
+## Preparing a Clone Source (Standalone ESXi)
+
+Standalone ESXi (no vCenter) does **not** support VM templates — that feature requires vCenter Server. Instead, Terraform clones from a powered-off VM directly.
+
+### Create the base VM
+
+1. Create an Ubuntu VM inside ESXi via the UI
+2. Install Ubuntu (enable OpenSSH server during install)
+3. After install, run:
+   ```bash
+   sudo apt update
+   sudo apt install -y open-vm-tools cloud-init
+   sudo apt clean
+   ```
+4. **Shut it down** (do not delete or snapshot it):
+   ```bash
+   sudo shutdown -h now
+   ```
+5. Note the exact VM name (e.g., `ubuntu-22.04-base`)
+6. In your `terraform.tfvars.local`, set:
+   ```hcl
+   vm_template_name = "ubuntu-22.04-base"
+   ```
+
+Terraform's `vsphere_virtual_machine` clone block works identically from a powered-off VM as from a vCenter template. The only difference is you must remember not to power the base VM back on manually — only let Terraform manage it by cloning from it.
+
 ## Next Phases
 
 | Phase | What | Skill |
